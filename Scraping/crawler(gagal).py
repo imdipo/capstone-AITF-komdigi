@@ -4,7 +4,7 @@ from urllib.parse import urljoin, urlparse
 from collections import deque
 
 """
-halo,
+halo, ini script paling awal yang dibuat
 jadi script ini aku asumsi kalau struktur tiap portal berita emang beda beda, tapi...
 pasti ada kesamaan kayak lokasi berita rekomendasi dan lokasi main articlenya
 
