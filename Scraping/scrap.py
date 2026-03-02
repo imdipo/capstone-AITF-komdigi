@@ -27,8 +27,6 @@ paragraph= []
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 }   
-# <scheme>://<netloc>/<path>;<params>?<query>#<fragment>
-# kita ambil netloc nya doang, biar domainnya ga kemana mana (stay di portal berita yang lagi kalian crawl)
 
 def dapet_link_dari_kompas(parser):
     container_links = parser.find("div", class_= list_link_compas)
@@ -56,6 +54,8 @@ def dapet_link_dari_kompas(parser):
             if urlparse(href).netloc == urlparse(start_url).netloc:
                 if href not in visited_urls:
                     queue_urls.append(href)
+# <scheme>://<netloc>/<path>;<params>?<query>#<fragment>
+# kita ambil netloc nya doang, biar domainnya ga kemana mana (stay di portal berita yang lagi kalian crawl)
         
         else: print("ga ada")
         
@@ -92,9 +92,14 @@ crawl_web(3)
 
 """
 sneaky, sneaky ada beberapa masalah ternyata
-1. bs4 ini kayaknya ngambil struktur html tapi bagian rekomendasi-nya itu belum fully load (belum diisi API ama js nya). 
+1. bs4 ini kayaknya ngambil struktur html tapi bagian rekomendasi-nya itu belum fully load (belum diisi API dari js nya). 
 jadi yang keambil cuman placeholder (#). tapi paragraf di url utama tetep keambil
 ga tau deh, apakah portal berita yang masih "kecil" bakal work
-2. gw belum terlalu ngerti gimana langsung request ke API nya
-3. damn, gw sambil belajar. mungkin bakal juga nyoba beberapa strategi lain
+2. gw belum terlalu ngerti gimana caranya biar bisa langsung request ke API nya
+3. damn, yodah gw sambil belajar. mungkin bakal juga sambil nyoba beberapa strategi lain
 """
+
+
+
+
+    
