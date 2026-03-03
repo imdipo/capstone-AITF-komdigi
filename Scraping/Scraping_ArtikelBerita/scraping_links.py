@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from config import HEADERS
+from utils import biar_ga_bosen
 
 """
 hmm, karena aku lumayan males pake selenium. segala click click ribet
@@ -39,7 +40,7 @@ def getting_all_link(homepage, link_terkumpul = None):
         # kondisi kalau ini udah di link berita (daun nya)
         urls =  soup.find_all('url')
         if urls:
-            print(f"okei, udah di page file link. ada sebanyak {len(urls)} link disini")
+            print(f"okei, udah di page file link. ada sebanyak {len(urls)} link disini {biar_ga_bosen()}")
             for link in urls:
                 link_berita = link.find('loc').text.strip().replace("\n", "").replace("\t", "")
                 link_terkumpul.add(link_berita) # pake set dulu sebelum txt biar ga ada duplikat    
