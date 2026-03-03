@@ -39,7 +39,7 @@ def extract_informasi(url):
 
 
 def harvest_informations(file, output_jsonl):
-    os.makedirs("data", exist_ok=True)
+    os.makedirs("Scraping_ArtikelBerita/data", exist_ok=True)
 
     file_path = 
 

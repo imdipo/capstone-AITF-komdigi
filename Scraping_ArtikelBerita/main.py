@@ -19,11 +19,11 @@ def main():
 
 
 
-def harvest_contents(file_txt, output_jsonl):
-    with open(file_txt, 'r') as f:
-        links = [baris_link.strip() for baris_link in f.readlines()]
+# def harvest_contents(file_txt, output_jsonl):
+#     with open(file_txt, 'r') as f:
+#         links = [baris_link.strip() for baris_link in f.readlines()]
 
-        print(f"sebanyak {len(links)} mulai dipanen")
+#         print(f"sebanyak {len(links)} mulai dipanen")
 
 
 
