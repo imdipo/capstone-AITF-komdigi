@@ -1,30 +1,33 @@
 from urllib.parse import urlparse
 
 from scraping_links import getting_all_link
-from scraping_contents import extract_informasi
+from scraping_contents import harvest_informations
 from utils import save_txt
 
 """
-belum selesai
+Halo, disini proses yang kulakuin adalah:
+1. kita akses file sitemap.xml dari setiap homepage portal berita 
+2. baru kita scrap isinya
+
+harusnya ini ga bakal seberat selenium sih, dan menurutku kayak kalian tinggal masukin link 
+dan hasilnya keluar, itu udah lumayan efisien
 """
 
-def main():
-    homepage = "https://www.detik.com/sitemap.xml"
+def main(homepage):
     nama_portal = urlparse(homepage).netloc
+
     urls = getting_all_link(homepage)
-    print(f"dapat{len(urls)} links")
 
     save_txt(urls, nama_portal)
 
+    harvest_informations(urls, nama_portal)
 
 
 
-# def harvest_contents(file_txt, output_jsonl):
-#     with open(file_txt, 'r') as f:
-#         links = [baris_link.strip() for baris_link in f.readlines()]
+homepage = "https://megapolitan.kompas.com/sitemap.xml"
 
-#         print(f"sebanyak {len(links)} mulai dipanen")
-
+if __name__ == "__main__":
+    main(homepage=homepage)
 
 
 
