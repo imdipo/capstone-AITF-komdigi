@@ -39,11 +39,13 @@ def extract_informasi(url):
 
 
 def harvest_informations(file, output_jsonl):
-    os.makedirs("Scraping_ArtikelBerita/data", exist_ok=True)
+    print(f"sebanyak {len(file)} mulai dipanen")
+    os.makedirs("data", exist_ok=True)
 
-    file_path = 
+        
+    file_path = os.path.join("data", f"{output_jsonl}.jsonl")
 
-    with open(f"{output_jsonl}.jsonl", "a", encoding="utf-8") as f_out:
+    with open(file_path, "a", encoding="utf-8") as f_out:
         with ThreadPoolExecutor(max_workers=10) as executor:
             # tqdm buat munculin progress bar
             results = list(tqdm(executor.map(extract_informasi, file), total=len(file)))
@@ -51,12 +53,3 @@ def harvest_informations(file, output_jsonl):
             for res in results:
                 if res and len(res['text']) > 200: # ambil yang teknys panjang 
                     f_out.write(json.dumps(res, ensure_ascii=False) + "\n")
-
-
-
-harvest_informations("link_portal_megapolitan.kompas.com.txt", "test")
-
-    # with open(file_txt, 'r') as f:
-    #     links = [baris_link.strip() for baris_link in f.readlines()]
-
-    #     print(f"sebanyak {len(links)} mulai dipanen")
