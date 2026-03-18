@@ -11,15 +11,15 @@ RANDOM_KATA = [
 ]
 
 MAP_PORTAL = {
-   "cnnindonesia": {"container": "div", "class": "detail-text"},
-   "indozone": {"container": "div", "class": "article-ct"},
-   "mkompas": {"container": "div", "class": "clearfix"},
-   "detik": {"container": "div", "class": "detail__body-text"},
-   "republika": {"container": "div", "class": "article-content"},
-   "liputan6": {"container": "div", "class": "article-content-body__item-content"},
-   "tribunnews": {"container": "div", "class": "side-article"},
+   "cnnindonesia": {"tag": "div", "spec": {"class": "detail-text"}},
+   "indozone": {"tag": "div", "spec": {"class": "article-ct"}},
+   "mkompas": {"tag": "div", "spec": {"class": "clearfix"}},
+   "detik": {"tag": "div", "spec":{"class": "detail__body-text"}},
+   "republika": {"tag": "div", "spec": {"class": "article-content"}},
+   "liputan6": {"tag": "div", "spec": {"class": "article-content-body__item-content"}},
+   "tribunnews": {"tag": "div", "spec": {"class": "side-article"}},
 
 
-   "kumparan": {"container": "main", "attrs": {"data-qa-id": "article-main"}}
+   "kumparan": {"tag": "main", "spec":{"data-qa-id": "article-main"}}
 
 }
