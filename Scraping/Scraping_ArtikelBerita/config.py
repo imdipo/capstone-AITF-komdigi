@@ -13,7 +13,7 @@ RANDOM_KATA = [
 MAP_PORTAL = {
    "cnnindonesia": {"tag": "div", "spec": {"class": "detail-text"}},
    "indozone": {"tag": "div", "spec": {"class": "article-ct"}},
-   "mkompas": {"tag": "div", "spec": {"class": "clearfix"}},
+   "kompas": {"tag": "div", "spec": {"class": "clearfix"}},
    "detik": {"tag": "div", "spec":{"class": "detail__body-text"}},
    "republika": {"tag": "div", "spec": {"class": "article-content"}},
    "liputan6": {"tag": "div", "spec": {"class": "article-content-body__item-content"}},
