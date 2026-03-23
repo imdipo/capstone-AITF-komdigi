@@ -43,6 +43,7 @@ def getting_all_link(homepage, link_terkumpul = None):
             print(f"okei, udah di page file link. ada sebanyak {len(urls)} link disini {biar_ga_bosen()}")
             for link in urls:
                 link_berita = link.find('loc').text.strip().replace("\n", "").replace("\t", "")
+                link_berita = link_berita + "?page=all" # ntah work atau ngga wkwk, cuman pada bisa sih ya
                 link_terkumpul.add(link_berita) # pake set dulu sebelum txt biar ga ada duplikat    
     
 
