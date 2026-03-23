@@ -1,5 +1,5 @@
 from urllib.parse import urlparse
-
+from parse_portal import ambil_portal
 from scraping_links import getting_all_link
 from scraping_contents import harvest_informations
 from utils import save_txt
@@ -14,7 +14,7 @@ dan hasilnya keluar, itu udah lumayan efisien
 """
 
 def main(homepage):
-    nama_portal = urlparse(homepage).netloc
+    nama_portal = ambil_portal(homepage)
 
     urls = getting_all_link(homepage)
 
