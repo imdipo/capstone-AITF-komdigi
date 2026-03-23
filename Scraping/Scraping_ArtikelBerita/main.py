@@ -28,10 +28,3 @@ homepage = "https://megapolitan.kompas.com/sitemap.xml"
 
 if __name__ == "__main__":
     main(homepage=homepage)
-
-
-
-
-
-
-# print(f"udah dikumpul sebanyak {len(link_terkumpul)} link disimpan di {file_link}")
