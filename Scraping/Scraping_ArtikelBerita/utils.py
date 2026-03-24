@@ -6,7 +6,7 @@ ini file txt ga kita pake, cuman gapapa simpen aja
 """
 def save_txt(urls, source_name):
     file_link = f"link_portal_{source_name}.txt"
-    with open(file_link, 'w') as f:  
+    with open(file_link, 'w', encoding="utf-8") as f:  
         for element in sorted(urls):
             f.write(element + "\n")
     print("\n udah disimpen file txt nya ya")
