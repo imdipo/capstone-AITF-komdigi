@@ -11,6 +11,7 @@ from parse_portal import ambil_portal
 def extract_informasi(url):
     try: 
         sumber_berita = ambil_portal(url) # nama web berita yang udah sesuai sama key dict nya
+        # print(sumber_berita)
         config = MAP_PORTAL.get(sumber_berita)
 
         response = requests.get(url, headers=HEADERS, timeout=10)
@@ -25,14 +26,14 @@ def extract_informasi(url):
         published_time = published_time["content"] if published_time else "N/A"
 
         if config:
-            source = soup.find(config["tag", config["spec"]])
+            source = soup.find(config["tag"], attrs=config["spec"])
         else:
             source = soup.find("body")
 
         if source:
             # kita ilangin tag tag yang bermasalh dulu, sebelum ambil paragraf sisanya
             for sampah in source.find_all(["strong", "b", "blockquote", "img"]):
-                sampah.decompose
+                sampah.decompose()
 
             all_p = source.find_all(["p", "li"])
 
@@ -60,10 +61,13 @@ def extract_informasi(url):
 
 def harvest_informations(file, output_jsonl):
     print(f"sebanyak {len(file)} mulai dipanen")
-    os.makedirs("Scraping_ArtikelBerita/data", exist_ok=True)
+
+    base_folder = os.path.dirname(os.path.abspath(__file__))
+    folder_data = os.path.join(base_folder, "data")
+    os.makedirs(folder_data, exist_ok=True)
 
         
-    file_path = os.path.join("Scraping_ArtikelBerita/data", f"{output_jsonl}.jsonl")
+    file_path = os.path.join(folder_data, f"{output_jsonl}.jsonl")
 
     with open(file_path, "a", encoding="utf-8") as f_out:
         with ThreadPoolExecutor(max_workers=10) as executor:
