@@ -31,15 +31,28 @@ def extract_informasi(url):
             source = soup.find("body")
 
         if source:
+            # # buat jpnn (belum dipakem, masih ada masalah dikit)
+            # for identitas in source.find_all("span", class_="jpnncom"):
+            #     identitas.decompose()
+
             # kita ilangin tag tag yang bermasalh dulu, sebelum ambil paragraf sisanya
             for sampah in source.find_all(["strong", "b", "blockquote", "img"]):
                 sampah.decompose()
 
             all_p = source.find_all(["p", "li"])
 
-            # isi berita (panjangnya > 50 karakter. kalau dibawah rawan iklan)
-            # biar ga dapet teks navigasi/menu
-            content = "\n".join([p.get_text(strip=True) for p in all_p if len(p.get_text(strip=True)) > 50])
+            teks = []
+
+            for i, p in enumerate(all_p):
+                text = p.get_text(strip=True)
+
+                if i == 0 and text.startswith("-"):
+                    text = text.lstrip("-").strip()
+                
+                if text and len(text) > 25: # isi berita (panjangnya > 25 karakter. kalau dibawah rawan iklan)
+                    teks.append(text)
+
+            content = "\n".join(teks)
 
             # debug
             # print(f"title: {title}")
@@ -69,6 +82,7 @@ def harvest_informations(file, output_jsonl):
         
     file_path = os.path.join(folder_data, f"{output_jsonl}.jsonl")
 
+    nomor_file = 0
     with open(file_path, "a", encoding="utf-8") as f_out:
         with ThreadPoolExecutor(max_workers=10) as executor:
             # tqdm buat munculin progress bar
@@ -77,3 +91,6 @@ def harvest_informations(file, output_jsonl):
             for res in results:
                 if res and len(res['text']) > 200: # ambil yang teknys panjang 
                     f_out.write(json.dumps(res, ensure_ascii=False) + "\n")
+                    nomor_file += 1
+    
+    print(f"sudah dipanen, total sekarang ada {nomor_file}")
