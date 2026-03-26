@@ -1,5 +1,6 @@
 import requests
 import json
+import re
 import os
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
@@ -42,16 +43,20 @@ def extract_informasi(url):
             all_p = source.find_all(["p", "li"])
 
             teks = []
+            pattern_iklan = re.compile(r"baca\s+juga|simak\s+juga|artikel\s+terkait", re.IGNORECASE)
 
             for i, p in enumerate(all_p):
                 text = p.get_text(strip=True)
 
-                if i == 0 and text.startswith("-"):
-                    text = text.lstrip("-").strip()
+                if i == 0:
+                    text = re.sub(r'^[^\w\d]+', '', text).strip()
+                    # for strip in STRIP_ANEH:
+                    #     text = text.lstrip(strip)
+                    # text = re.sub(r'^[^\w\d]+', '', text).strip()
                 
-                if text and len(text) > 25: # isi berita (panjangnya > 25 karakter. kalau dibawah rawan iklan)
+                if text and len(text) > 50 and not pattern_iklan.search(p.get_text()): # isi berita (panjangnya > 50 karakter. kalau dibawah rawan iklan)
                     teks.append(text)
-
+                
             content = "\n".join(teks)
 
             # debug
