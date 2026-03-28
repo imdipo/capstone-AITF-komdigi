@@ -41,7 +41,7 @@ with open(file_output, 'w', encoding="utf-8") as output_file:
                     continue
 
                 data["title"] = bersihin_invisibleChar(data.get('title', ''))
-                data["content"] = bersihin_invisibleChar(data.get('content', ''))
+                data["text"] = bersihin_invisibleChar(data.get('text', ''))
 
                 output_file.write(json.dumps(data, ensure_ascii=False) + '\n')
             
