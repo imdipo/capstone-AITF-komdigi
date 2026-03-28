@@ -10,6 +10,7 @@ RANDOM_KATA = [
     "ganteng",
 ]
 
+
 MAP_PORTAL = {
    "cnnindonesia": {"tag": "div", "spec": {"class": "detail-text"}},
    "indozone": {"tag": "div", "spec": {"class": "article-ct"}},
@@ -17,7 +18,7 @@ MAP_PORTAL = {
    "detik": {"tag": "div", "spec":{"class": "detail__body-text"}},
    "liputan6": {"tag": "div", "spec": {"class": "article-content-body__item-content"}},
    "cnbcindonesia": {"tag": "div", "spec": {"class": "detail-text"}},
-   "okezone": {"tag": "div", "spec":{"class" : "c-detail read"}},
+   "okezone": {"tag": "div", "spec":{"class" : "c-detail read"}}, 
 
    "kumparan": {"tag": "main", "spec":{"data-qa-id": "article-main"}}
 
