@@ -4,8 +4,8 @@ import json
 """
 buat gabungin jsonl file yang udah di labellin
 """
-
-pathData = Path("Relabelling\data")
+BASE_DIR = Path(__file__).resolve().parent
+pathData = BASE_DIR / "data"
 jsonlGabungan = pathData / "jsonlGabungan.jsonl"
 filter = "labeled"
 
@@ -18,10 +18,12 @@ def filterFile(jsonl):
 
         if lolos:
             file_labeled.append(path)
+            # print(file_labeled)
 
     return file_labeled
 
 seen = set()
+
 
 with open(jsonlGabungan, 'w', encoding="utf-8") as outputFile:
     x = filterFile(pathData)
@@ -34,5 +36,5 @@ with open(jsonlGabungan, 'w', encoding="utf-8") as outputFile:
                     seen.add(judul)
 
                     outputFile.write(json.dumps(data, ensure_ascii=False) + "\n")
-
+                
             
