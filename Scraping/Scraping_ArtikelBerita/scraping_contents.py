@@ -30,31 +30,46 @@ def extract_informasi(url):
             source = soup.find(config["tag"], attrs=config["spec"])
         else:
             source = soup.find("body")
-
+ 
         if source:
             # # buat jpnn (belum dipakem, masih ada masalah dikit)
             # for identitas in source.find_all("span", class_="jpnncom"):
             #     identitas.decompose()
 
-            # kita ilangin tag tag yang bermasalh dulu, sebelum ambil paragraf sisanya
-            for sampah in source.find_all(["strong", "b", "blockquote", "img"]):
-                sampah.decompose()
-
             all_p = source.find_all(["p", "li"])
+            total_paragraf = len(all_p)
 
             teks = []
             pattern_iklan = re.compile(r"baca\s+juga|simak\s+juga|artikel\s+terkait", re.IGNORECASE)
 
             for i, p in enumerate(all_p):
-                text = p.get_text(strip=True)
+                text = p.get_text(separator=" ", strip=True)
+                text = text.replace('\xa0', ' ').strip()
+                text = re.sub(r"\s+([.,!?])", r"\1", text)  
+
+                if pattern_iklan.search(text):
+                    p.decompose() 
+                    continue
+
+                for sampah in p.find_all(["strong", "b", "blockquote", "img"]):
+                    if sampah.name in ["strong", "b"] and sampah.find_parent("a"):
+                        continue
+                    sampah.decompose()
+
+                text = p.get_text(separator=" ", strip=True)
+                text = re.sub(r"\s+([.,!?])", r"\1", text)
 
                 if i == 0:
                     text = re.sub(r'^[^\w\d]+', '', text).strip()
-                    # for strip in STRIP_ANEH:
-                    #     text = text.lstrip(strip)
-                    # text = re.sub(r'^[^\w\d]+', '', text).strip()
+                    text = re.sub(r'^[A-Z0-9.\s]+[-—:]\s*', '', text)
+                    text = re.sub(r'^[^a-zA-Z0-9]+', '', text).strip()
                 
-                if text and len(text) > 50 and not pattern_iklan.search(p.get_text()): # isi berita (panjangnya > 50 karakter. kalau dibawah rawan iklan)
+                if i == total_paragraf - 1:
+                    pattern_penutup = re.compile(r"seperti\s+apa|simak\s+video|baca\s+selengkapnya", re.IGNORECASE)
+                    if pattern_penutup.search(text):
+                        continue
+                
+                if text and len(text) > 50: # isi berita (panjangnya > 50 karakter. kalau dibawah rawan iklan)
                     teks.append(text)
                 
             content = "\n".join(teks)
