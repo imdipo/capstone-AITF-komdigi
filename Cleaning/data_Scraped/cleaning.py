@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from tqdm import tqdm
 
-trash_keywords = ['zodiak', 'jadwal', 'imsak', 'akhir', "pertandingan", "bursa"]
+trash_keywords = ['zodiak', 'jadwal', 'imsak', "pertandingan", "bursa"]
 
 folder_jsonl = Path("Scraping/Scraping_ArtikelBerita/data")  
 
