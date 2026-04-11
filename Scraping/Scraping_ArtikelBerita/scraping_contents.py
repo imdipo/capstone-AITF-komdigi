@@ -1,4 +1,6 @@
 import requests
+import random
+import time
 import json
 import re
 import os
@@ -14,8 +16,9 @@ def extract_informasi(url):
         sumber_berita = ambil_portal(url) # nama web berita yang udah sesuai sama key dict nya
         # print(sumber_berita)
         config = MAP_PORTAL.get(sumber_berita)
+        time.sleep(random.uniform(0.5, 2.0))  
 
-        response = requests.get(url, headers=HEADERS, timeout=10)
+        response = requests.get(url, headers=HEADERS, timeout=(6, 15))
         soup = BeautifulSoup(response.content, 'html.parser')
                 
         # judul (dari Meta Tag - Universal)
@@ -104,9 +107,9 @@ def harvest_informations(file, output_jsonl):
 
     nomor_file = 0
     with open(file_path, "a", encoding="utf-8") as f_out:
-        with ThreadPoolExecutor(max_workers=10) as executor:
+        with ThreadPoolExecutor(max_workers=5) as executor:
             # tqdm buat munculin progress bar
-            results = list(tqdm(executor.map(extract_informasi, file), total=len(file)))
+            results = list(tqdm(executor.map(extract_informasi, file), total=len(file))) 
 
             for res in results:
                 if res and len(res['text']) > 200: # ambil yang teknys panjang 
