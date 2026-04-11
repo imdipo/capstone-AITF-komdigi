@@ -4,18 +4,18 @@ import random
 from pathlib import Path
 
 """
-sampling 3000 data dari data gabungan
+sampling n data dari data gabungan
 """
 
 base_folder = os.path.dirname(os.path.abspath(__file__))
 folder_data = os.path.join(base_folder, "data")
 os.makedirs(folder_data, exist_ok=True)
-output_jsonl = os.path.join(folder_data, "3000_sampling.jsonl")
+output_jsonl = os.path.join(folder_data, "9000_sampling.jsonl")
 
 
-path_jsonl = Path("Cleaning\\data_Scraped\\data_gabungan\\berita_gabungan.jsonl")  
+path_jsonl = Path("data\\belumlabel2.jsonl")  
 
-def sampling(jsonl_input, jsonl_output, total_sampling = 3000):
+def sampling(jsonl_input, jsonl_output, total_sampling = 9000):
     with open(jsonl_output, 'w', encoding="utf-8") as output:
         with open(jsonl_input, 'r', encoding="utf-8") as jsonl_path:
             total_data = sum(1 for _ in jsonl_path)
