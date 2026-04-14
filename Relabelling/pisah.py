@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 """
 kalau mati terus beberapa berita udah dilabel, dari pada diulang
@@ -38,8 +39,11 @@ def filter_jsonl_by_title(source_file, reference_file, output_file):
     print("Match (ada di reference):", count_match)
     print("Written (tidak ada di reference):", count_written)
 
+BASE_DIR = Path(__file__).resolve().parent
+folder_data = BASE_DIR / "data"
+
 filter_jsonl_by_title(
-    "data/filtered_output3.jsonl",
-    "data/filtered_outputq3_labeled_qwen.jsonl",
-    "data/filtered_output4.jsonl"
+    f"{folder_data}/belumlabel2.jsonl",
+    f"{folder_data}/jsonlGabungan.jsonl",
+    f"{folder_data}/belumlabel3.jsonl"
 )
