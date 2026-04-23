@@ -28,29 +28,21 @@ def getting_all_link(homepage, link_terkumpul = None):
             for sitemap in sitemap_lain:
                 loc_tag = sitemap.find(re.compile("loc$"))
                 print(loc_tag)
+                raw_text = loc_tag.get_text(strip=True)
+                clean_url = raw_text.replace("<![CDATA[", "").replace("]]>", "")
+                sub_urls = clean_url.strip()
 
-                if loc_tag:
-                    raw_text = loc_tag.get_text(strip=True)
-                    clean_url = raw_text.replace("<![CDATA[", "").replace("]]>", "")
-                    if not clean_url.startswith("http"):
-                        base_url = "https://koran-jakarta.com/"
-                        if clean_url.startswith("web") or clean_url.startswith("news"):
-                            sub_urls = base_url + clean_url[1:]
-                        else: sub_urls = base_url + clean_url
-    
-                    sub_urls = sub_urls.strip()
+                lastmod = sitemap.find(re.compile("lastmod$"))
+                if lastmod:
+                    raw_tanggal = lastmod.get_text(strip=True)
+                    clean_tanggal = raw_tanggal.replace("<![CDATA[", "").replace("]]>", "")
+                    tanggal = clean_tanggal.strip()
 
-                    lastmod = sitemap.find(re.compile("lastmod$"))
-                    if lastmod:
-                        raw_tanggal = lastmod.get_text(strip=True)
-                        clean_tanggal = raw_tanggal.replace("<![CDATA[", "").replace("]]>", "")
-                        tanggal = clean_tanggal.strip()
-
-                        print(f"tanggal-1 {tanggal}")
-                        tahun = int(tanggal[:4])
-                        print(f"tanggal-2 {tanggal}")
-                        if tahun >= 2024:
-                            getting_all_link(sub_urls, link_terkumpul)
+                    print(f"tanggal-1 {tanggal}")
+                    tahun = int(tanggal[:4])
+                    print(f"tanggal-2 {tanggal}")
+                    if tahun >= 2024:
+                        getting_all_link(sub_urls, link_terkumpul)
 
                 # else: getting_all_link(sub_urls, link_terkumpul)
 
