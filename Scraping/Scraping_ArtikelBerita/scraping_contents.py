@@ -16,9 +16,9 @@ def extract_informasi(url):
         sumber_berita = ambil_portal(url) # nama web berita yang udah sesuai sama key dict nya
         # print(sumber_berita)
         config = MAP_PORTAL.get(sumber_berita)
-        time.sleep(random.uniform(0.5, 2.0))  
+        time.sleep(random.uniform(1.0, 3.0)) 
 
-        response = requests.get(url, headers=HEADERS, timeout=(6, 15))
+        response = requests.get(url, headers=HEADERS, timeout=(6, 25))
         soup = BeautifulSoup(response.content, 'html.parser')
                 
         # judul (dari Meta Tag - Universal)
@@ -33,49 +33,73 @@ def extract_informasi(url):
             source = soup.find(config["tag"], attrs=config["spec"])
         else:
             source = soup.find("body")
+
+        # if not source:
+        #     print(f"[SKIP] source None: {url}")
+        #     with open("debug_page.html", "w", encoding='utf-8') as f:
+        #         f.write(response.text)
+        #     return None
  
         if source:
-            # # buat jpnn (belum dipakem, masih ada masalah dikit)
-            # for identitas in source.find_all("span", class_="jpnncom"):
-            #     identitas.decompose()
 
             all_p = source.find_all(["p", "li"])
             total_paragraf = len(all_p)
 
             teks = []
-            pattern_iklan = re.compile(r"baca\s+juga|simak\s+juga|artikel\s+terkait", re.IGNORECASE)
+            pattern_iklan = re.compile(r"(also|baca|simak|cek|lihat|bacaan)\s+(read|juga|berita|lainnya)|artikel\s+terkait", re.IGNORECASE)
 
-            for i, p in enumerate(all_p):
+            for p in all_p:
                 text = p.get_text(separator=" ", strip=True)
                 text = text.replace('\xa0', ' ').strip()
                 text = re.sub(r"\s+([.,!?])", r"\1", text)  
 
+                if not text:
+                    continue    
+
                 if pattern_iklan.search(text):
-                    p.decompose() 
                     continue
 
-                for sampah in p.find_all(["strong", "b", "blockquote", "img"]):
+                for sampah in p.find_all(["blockquote", "img", "figure"]): # hapus strong ama b. soalnya udah di handle ama regex
                     if sampah.name in ["strong", "b"] and sampah.find_parent("a"):
                         continue
                     sampah.decompose()
-
+                
                 text = p.get_text(separator=" ", strip=True)
                 text = re.sub(r"\s+([.,!?])", r"\1", text)
+                
+                if text and len(text) > 25:
+                    teks.append(text)
 
+            clean_teks = []
+            for i, paragraf in enumerate(teks):
+                text = paragraf
                 if i == 0:
                     text = re.sub(r'^[^\w\d]+', '', text).strip()
-                    text = re.sub(r'^[A-Z0-9.\s]+[-—:]\s*', '', text)
-                    text = re.sub(r'^[^a-zA-Z0-9]+', '', text).strip()
+                    text = re.sub(r'^.*?\|\s*.*?\s*\|\s*', '', text)
+                    text = re.sub(r'^[A-Z\s]{3,30}\.\s*[A-Z\s]{3,30}\.\s*', '', text)
+                    text = re.sub(r'^[A-Z][a-zA-Z\s]{2,20}\s*\(\d{1,2}/\d{1,2}/\d{4}\)\s*[-—:]\s*', '', text)
+                    text = re.sub(r'^[A-Za-z\.]+,\s*[A-Z\s]{2,20}[-—:]\s*', '', text)
+                    text = re.sub(r'^[A-Z][A-Z\s,\.]{2,40}[-—:]\s*', '', text)
+                    text = re.sub(r'^.{1,60}?[–—-]\s*', '', text)
+                    # text = re.sub(r'^[A-Z0-9.\s]+[-—:]\s*', '', text)
+                    # text = re.sub(r'^[^a-zA-Z0-9]+', '', text).strip()
                 
                 if i == total_paragraf - 1:
                     pattern_penutup = re.compile(r"seperti\s+apa|simak\s+video|baca\s+selengkapnya", re.IGNORECASE)
-                    if pattern_penutup.search(text):
+                    pattern_url_awal = re.compile(r"^\s*url\s*:\s*https?://", re.IGNORECASE)
+
+                    if pattern_penutup.search(text) or pattern_url_awal.search(text):
                         continue
-                
-                if text and len(text) > 50: # isi berita (panjangnya > 50 karakter. kalau dibawah rawan iklan)
-                    teks.append(text)
-                
-            content = "\n".join(teks)
+
+                    text = re.sub(r'\s*(?:\*+\s*)?\([^)]*\)\s*$', '', text)
+                    text = re.sub(r'\*+\s*$', '', text)
+
+                # text = p.get_text(" ", strip=True)
+                # print(f"[CLEAN {i}] len={len(text)}, {text[:80]}")
+                # print("-"*50)
+                clean_teks.append(text)
+
+            content = "\n".join(clean_teks)
 
             # debug
             # print(f"title: {title}")
@@ -108,12 +132,13 @@ def harvest_informations(file, output_jsonl):
     nomor_file = 0
     with open(file_path, "a", encoding="utf-8") as f_out:
         with ThreadPoolExecutor(max_workers=5) as executor:
-            # tqdm buat munculin progress bar
-            results = list(tqdm(executor.map(extract_informasi, file), total=len(file))) 
 
-            for res in results:
-                if res and len(res['text']) > 200: # ambil yang teknys panjang 
-                    f_out.write(json.dumps(res, ensure_ascii=False) + "\n")
+            for hasil in tqdm(executor.map(extract_informasi, file), total=len(file)):
+                if hasil and len(hasil['text']) > 50: # ambil yang teknys panjang 
+                    f_out.write(json.dumps(hasil, ensure_ascii=False) + "\n")
+                    f_out.flush()
                     nomor_file += 1
+                # else:
+                #     print("DROP:", hasil['text'], hasil["url"])
     
     print(f"sudah dipanen, total sekarang ada {nomor_file}")
