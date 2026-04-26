@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from tqdm import tqdm
 
-trash_keywords = ['zodiak', 'jadwal', 'imsak', "pertandingan", "bursa"]
+trash_keywords = ['zodiak', 'imsak', "pertandingan", "bursa", "bola", "puasa", "adzan", "sholat", "voli", "emas", "perak"]
 
 folder_jsonl = Path("Scraping/Scraping_ArtikelBerita/data")  
 
@@ -26,14 +26,19 @@ base_folder = os.path.dirname(os.path.abspath(__file__))
 folder_data = os.path.join(base_folder, "data_gabungan")
 os.makedirs(folder_data, exist_ok=True)
 
-file_output = os.path.join(folder_data, "berita_gabungan.jsonl")
+file_output = os.path.join(folder_data, "berita_gabungann.jsonl")
 
 with open(file_output, 'w', encoding="utf-8") as output_file:
     for file_json in folder_jsonl.glob("*.jsonl"):
+
         print(file_json)
 
         with open(file_json, 'r', encoding="utf-8") as file_input:
             for barisJson in file_input:
+                baris_valid = barisJson.strip()
+                if not baris_valid:
+                    continue
+
                 data = json.loads(barisJson)
                 
                 judul = data.get('title', '').lower()
