@@ -1,9 +1,8 @@
 # Biar apa?
 
-Biarin
+ini buat progress pengumpulan & pembuatan dataset DFK
 
-## Attention
+## Hasilnya
+hasilnya sudah tersimpan dalam bentuk alpaca-style. tapi diminta contoh bentuk TRL nya juga jadi yaudah
 
-⚠️ This project is for academic and research purposes only ⚠️
-
-prikitiw
+liat disini untuk dataset dalam bentuk [AlpacaStyle](https://huggingface.co/datasets/Brodip/DatasetSFT_DFK) dan disini untuk dataset dalam format [TRL](https://huggingface.co/datasets/Brodip/DatasetSFT_DFK_TRL)
