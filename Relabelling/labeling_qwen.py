@@ -5,7 +5,7 @@ from tqdm import tqdm
 
 """
 kemaren api openAI nya broken (ternyata api OpenRouter, bilang geh kan ga tau aku ya)
-jadi buat labellin pake qwen aja
+jadi buat labellin pake qwen lagi tapi via modal aja
 """
 
 # Setup Image & Dependencies
@@ -76,8 +76,8 @@ Berita:
 
 @app.local_entrypoint()
 def main():
-    input_file = "data/filtered_output4.jsonl"
-    output_file = "data/filtered_outputq4_labeled_qwen.jsonl"
+    input_file = "data/9000_sampling.jsonl"
+    output_file = "data/9000_labeled_qwen.jsonl"
     
     if not os.path.exists(input_file):
         print(f"File {input_file} tidak ditemukan!")
